@@ -2,9 +2,9 @@ import sys
 import yaml
 import os
 from pathlib import Path
-# from ..config import output_file
+from .config import output_file
 
-output_file = "azure-pipelines.yml"
+# output_file = "azure-pipelines.yml"
 
 def yaml_dumper(data, default_flow_style=True):
     """Output YAML object to file"""
@@ -106,6 +106,5 @@ class Generate_Dotnet_Pipeline(Generate_Base_Resources):
 
 
 # Generate_Base_Resources("test_project", "**/Enrollment.Api.sln", "Release")
-Generate_Dotnet_Pipeline("test_project2", "api_testtt", "debug", yml_trigger_exclusion=True, pool="Local")
-
+# Generate_Dotnet_Pipeline("test_project2", "api_testtt", "debug", yml_trigger_exclusion=True, pool="Local")
 
