@@ -1,0 +1,19 @@
+body {
+    background-color: dimgray;
+}
+
+.sub-background {
+    background-color:LightSlateGrey;
+    color:black;
+    padding:25px;
+}
+
+.submit-button {
+    background-color:LightSlateGrey;
+    color:black;
+    padding:30px;
+}
+
+label {
+    font-weight: bolder;
+}

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>YAML Build Pipeline Generator</title>
+    <!-- <link rel="stylesheet" type="text/css" href="/src/static/styles/form.css"> -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/form.css') }}">
+</head>
+
+<body>
+
+    <h1>YAML Build Pipeline Generator</h1>
+
+    <div class="sub-background">
+        <form method="POST">
+            <div class="org-input">
+                <label for="org-label">Select Organization Name</label><br>
+                <select id="org-input" name="org-input">
+                    <option value="Stifel Financial">Stifel Financial</option>
+                    <option value="Stifel POC">Stifel POC</option>
+                </select><br>
+                <br>
+            </div>
+
+            <div class="language-input">
+                <label for="language-label">Select Program Language</label><br>
+                <select id="language-input" name="language-input">
+                    <option value=".NET Core">.NET Core</option>
+                    <option value="AngularJS">AngularJS</option>
+                </select><br>
+                <br>
+            </div>
+
+            <div class="agent-pool">
+                <label for="agent-pool-label">Select agent pool</label><br>
+                
+                <div class="agent-pool-options">
+                    <input type="radio" id="option-1" name="agent-pool-answer" value="AWS" checked="checked">
+                    <label for="option-1">AWS (Default)</label>
+    
+                    <input type="radio" id="option-2" name="agent-pool-answer" value="Local">
+                    <label for="option-2">Local</label><br>
+                </div>
+
+                <br>
+            </div>
+
+            <div class="repo-input">
+                <label for="repo-label">Repo Name</label><br>
+                <input type="text" id="repo-name" name="repo-name" placeholder="stifel.tracker.api"><br>
+                <br>
+            </div>
+
+            <div class="app-input">
+                <label for="app-label">App Name</label><br>
+                <input type="text" id="app-name" name="app-name" placeholder="Tracker2.0"><br>
+                <br>
+            </div>
+
+            <div class="framework-input">
+                <label for="framework-label">Framework Version</label><br>
+                <select id="framework-name" name="framework-name">
+                    <option value="2.1">2.1</option>
+                    <option value="3.1">3.1</option>
+                </select><br>
+                <br>
+            </div>
+
+            <div class="configuration-input">
+                <label for="build-config-label">Build Configuration</label><br>
+                <select id="build-config-name" name="build-config-name">
+                    <option value="Debug">Debug</option>
+                    <option value="Release">Release</option>
+                </select><br>
+            </div>
+    </div>
+
+    <div class="submit-button">
+        <p>
+            <input type="submit" value="Submit">
+        </p>
+    </div>
+
+    </form>
+</body>
+
+</html>
