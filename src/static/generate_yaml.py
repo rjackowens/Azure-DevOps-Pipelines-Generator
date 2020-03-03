@@ -4,8 +4,6 @@ import os
 from pathlib import Path
 from .config import output_file
 
-# output_file = "azure-pipelines.yml"
-
 def yaml_dumper(data, default_flow_style=True):
     """Output YAML object to file"""
     file = "./" + output_file
@@ -17,11 +15,13 @@ def yaml_dumper(data, default_flow_style=True):
     except IOError as e:
         raise Exception(e, "Unable to output YAML file")
 
-if Path("./azure-pipelines.yml").exists():
-    try:
-        os.remove("./azure-pipelines.yml")
-    except IOError as e:
-        raise Exception(e, "Unable to remove azure-pipelines.yml")
+def delete_yaml_file():
+    """Deletes existing YAML file"""
+    if Path(f"./{output_file}").exists():
+        try:
+            os.remove(f"./{output_file}")
+        except IOError as e:
+            raise Exception(e, f"Unable to remove {output_file}")
 
 
 class Generate_Base_Resources:
@@ -33,6 +33,7 @@ class Generate_Base_Resources:
         self.yml_trigger_exclusion = yml_trigger_exclusion
         self.pool = pool
 
+        delete_yaml_file()
         self.create_resources()
         self.create_trigger()
         self.create_pool()

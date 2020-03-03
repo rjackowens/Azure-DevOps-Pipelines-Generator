@@ -1,10 +1,15 @@
 from src import app
-from flask import render_template, request
+from flask import render_template, request, flash
+from flask_toastr import Toastr
 from .static.generate_yaml import Generate_Base_Resources, Generate_Dotnet_Pipeline
 from .static.create_repository import create_repository
+from .static.config import secret_key
+
+toastr = Toastr(app)
+app.secret_key = secret_key
 
 @app.route("/", methods=["GET", "POST"])
-def form():
+def form():        
     if request.method == "POST":
         agent_pool = request.form.get("agent-pool-answer")
         project_name = request.form.get("project-name")
@@ -16,12 +21,14 @@ def form():
 
         create_repository(project_name, repo_name)
 
+        flash("Request submitted successfully", "success")
+
     return render_template("form.html")
 
 @app.errorhandler(404)
-def page_not_found(e):
+def page_not_found(error):
     return render_template("404.html")
 
 @app.errorhandler(500)
 def internal_error(error):
-    return render_template("500.html"), 500
+    return render_template("500.html")
