@@ -1,0 +1,25 @@
+{
+    "refUpdates": [
+      {
+        "name": "refs/heads/master",
+        "oldObjectId": "0000000000000000000000000000000000000000"
+      }
+    ],
+    "commits": [
+      {
+        "comment": "Created YAML build pipeline via web form",
+        "changes": [
+          {
+            "changeType": "add",
+            "item": {
+              "path": "/azure-pipelines.yml"
+            },
+            "newContent": {
+              "content": "empty-content",
+              "contentType": "base64encoded"
+            }
+          }
+        ]
+      }
+    ]
+  }

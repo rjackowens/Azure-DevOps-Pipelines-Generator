@@ -2,7 +2,7 @@ from src import app
 from flask import render_template, request, flash
 from flask_toastr import Toastr
 from .static.generate_yaml import Generate_Base_Resources, Generate_Dotnet_Pipeline
-from .static.create_repository import create_repository
+from .static.azure_git import create_repository, commit_yaml_file
 from .static.config import secret_key
 
 toastr = Toastr(app)
@@ -18,8 +18,8 @@ def form():
         build_config = request.form.get("build-config-name")
 
         Generate_Dotnet_Pipeline(repo_name, api_name, build_config, pool=agent_pool)
-
         create_repository(project_name, repo_name)
+        commit_yaml_file(project_name, repo_name)
 
         flash("Request submitted successfully", "success")
 

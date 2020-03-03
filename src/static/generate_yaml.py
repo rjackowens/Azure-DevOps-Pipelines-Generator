@@ -78,7 +78,6 @@ class Generate_Dotnet_Pipeline(Generate_Base_Resources):
     def __init__(self, *args, **kwargs):
         # super().__init__("test_project", "**/Enrollment.Api.sln", "Release")
         super().__init__(*args, **kwargs)
-        # self.create_base_resources()
 
         self.create_restore_task()
         self.create_unit_test_task()
@@ -104,8 +103,3 @@ class Generate_Dotnet_Pipeline(Generate_Base_Resources):
         """Create pipeline artifact publish task"""
         publish_artifact_object = [{'task': "PublishBuildArtifacts@1", 'displayName': "Publish $(projectName) Artifact", 'inputs': {"PathtoPublish": "$(System.DefaultWorkingDirectory)/Artifacts/$(projectName)", "ArtifactName": "drop", "publishLocation": "Container"}}]
         yaml_dumper(publish_artifact_object)
-
-
-# Generate_Base_Resources("test_project", "**/Enrollment.Api.sln", "Release")
-# Generate_Dotnet_Pipeline("test_project2", "api_testtt", "debug", yml_trigger_exclusion=True, pool="Local")
-
