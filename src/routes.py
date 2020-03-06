@@ -23,7 +23,7 @@ def form():
 
         flash("Request submitted successfully", "success")
 
-    return render_template("form.html")
+    return render_template("index.html")
 
 @app.errorhandler(404)
 def page_not_found(error):

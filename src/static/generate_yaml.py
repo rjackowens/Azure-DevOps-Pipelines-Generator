@@ -76,7 +76,6 @@ class Generate_Base_Resources:
 class Generate_Dotnet_Pipeline(Generate_Base_Resources):
     """Generate YAML build pipeline for .NET application"""
     def __init__(self, *args, **kwargs):
-        # super().__init__("test_project", "**/Enrollment.Api.sln", "Release")
         super().__init__(*args, **kwargs)
 
         self.create_restore_task()
