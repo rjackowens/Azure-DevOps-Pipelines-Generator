@@ -40,7 +40,7 @@
 
 <body>
     {{ toastr.include_toastr_js() }}
-    <div class="page-wrapper bg-gra-02 p-t-100 p-b-100 font-poppins" style="background-image: url(/src/static/images/bull-bear-white-background.png); background-repeat: no-repeat; background-size: cover;">
+    <div class="page-wrapper p-t-100 p-b-100 font-poppins" style="background-image:url({{'static/images/bull-bear-white-background.png'}});">
         <div class="wrapper wrapper--w680">
             <div class="card card-4">
                 <div class="card-body">
@@ -54,6 +54,24 @@
                                         <option disabled="disabled" selected="selected">Choose option</option>
                                         <option>Stifel Financial</option>
                                         <option>Stifel POC</option>
+                                    </select>
+                                    <div class="select-dropdown"></div>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label class="label">Project Name</label>
+                                <div class="rs-select2 js-select-simple select--no-search">
+                                    <select id="project-name" name="project-name">
+                                        <option disabled="disabled" selected="selected">Choose option</option>
+                                        <option>AceAutomation</option>
+                                        <option>DataPipeline</option>
+                                        <option<>DevOps</option>
+                                        <option>External</option>
+                                        <option>Jobs</option>
+                                        <option>Miscellaneous</option>
+                                        <option>Packer</option>
+                                        <option>Tracker2.0</option>
+                                        <option>Utilities</option>
                                     </select>
                                     <div class="select-dropdown"></div>
                                 </div>
@@ -104,12 +122,12 @@
                                     </label>
                                 </div>
                             </div> 
-                            <div class="col-2">
+                            <!-- <div class="col-2">
                                 <div class="input-group">
                                     <label class="label">Project Name</label>
                                     <input class="input--style-4" type="text" name="project-name">
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="col-2">
                                 <div class="input-group">
                                     <label class="label">Repo Name</label>
