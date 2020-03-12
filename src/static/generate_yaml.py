@@ -23,82 +23,105 @@ def delete_yaml_file():
         except IOError as e:
             raise Exception(e, f"Unable to remove {output_file}")
 
+def generate_base_resources(
+    projectName, projectApi, buildConfiguration,
+    branch="master", yml_trigger_exclusion=False, pool="AWS"):
+    """Deletes existing YAML file and generates base resources"""
 
-class Generate_Base_Resources:
-    """Generate base resources for YAML pipeline"""
-    def __init__(self, projectName, projectApi, buildConfiguration, yml_trigger_exclusion=False, pool="AWS"):
-        self.projectName = projectName
-        self.projectApi = projectApi
-        self.buildConfiguration = buildConfiguration
-        self.yml_trigger_exclusion = yml_trigger_exclusion
-        self.pool = pool
+    resource_object = {
+        "resources": {
+                "repositories": [
+                    {
+                        "repository": "remote",
+                        "type": "git",
+                        "name": "DevOps/CICD.Scripts",
+                        "refs": "refs/heads/master"
+                    }
+                ]
+            }
+        }
+    trigger_object = {
+            "trigger": {
+                "branches": {
+                    "include": [branch
+                    ]
+                },
+                "paths": {
+                    "exclude": [
+                        "azure-pipelines.yml"
+                    ]
+                }
+            }
+        }
+    if yml_trigger_exclusion:
+        trigger_object = {"trigger": {"branches": {"include": [branch]}}}
 
-        delete_yaml_file()
-        self.create_resources()
-        self.create_trigger()
-        self.create_pool()
-        self.create_variables()
-        self.create_steps()
+    pool_object = {"pool": pool}
+    variables_object = {
+                'variables': {
+                "projectName": projectName,
+                "projectApi": projectApi,
+                "buildConfiguration": buildConfiguration
+            }
+        }
+    name_object = {"name": "$(BuildDefinitionName)_$(Build.BuildId)"}
+    steps_object = "steps:"
 
-    def create_resources(self):
-        """Add remote repository to pipeline"""
-        resource_object = {"resources": {"repositories": [{"repository": "remote", "type": "git", "name": "DevOps/CICD.Scripts", "refs": "refs/heads/master"}]}}
-        yaml_dumper(resource_object)
+    _resource_objects = [
+        resource_object,
+        trigger_object,
+        pool_object,
+        variables_object,
+        name_object,
+        steps_object
+    ]
 
-    def create_trigger(self, branch="master", yml_trigger_exclusion=False):
-        """Specify a branch with CI trigger"""
-        trigger_object = {"trigger": {"branches": {"include": [branch]},"paths": {"exclude": ["azure-pipelines.yml"]}}}
-        if self.yml_trigger_exclusion:
-            trigger_object = {"trigger": {"branches": {"include": [branch]}}}
-        yaml_dumper(trigger_object)
+    delete_yaml_file()
 
-    def create_pool(self, pool="AWS"):
-        """Agent pool build will run on"""
-        self.pool_object = {"pool": self.pool}
-        yaml_dumper(self.pool_object)
+    for object in _resource_objects:
+        yaml_dumper(object)
 
-    def create_variables(self):
-        """Build pipeline variables"""
-        variables_object = {'variables': {"projectName": self.projectName, "projectApi": self.projectApi, "buildConfiguration": self.buildConfiguration}}
-        yaml_dumper(variables_object)
-
-    def create_name(self):
-        """Set build pipeline name"""
-        name_object = {"name": "$(BuildDefinitionName)_$(Build.BuildId)"}
-        yaml_dumper(name_object)
-
-    def create_steps(self):
-        """Creates steps keyword"""
-        steps_object = "steps:"
-        yaml_dumper(steps_object)
-
-
-class Generate_Dotnet_Pipeline(Generate_Base_Resources):
+def generate_dotnet_pipeline(*args, **kwargs):
     """Generate YAML build pipeline for .NET application"""
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.create_restore_task()
-        self.create_unit_test_task()
-        self.create_dotnet_publish_task()
-        self.create_publish_artifact_task()
-
-    def create_restore_task(self):
-        """Create .NET restore build pipeline task"""
-        restore_object = [{'task': "DotNetCoreCLI@2", 'displayName': ".NET Restore", 'inputs': {"command": "restore", "projects": "$(projectApi)", "feedsToUse": "select", "verbosityRestore": "Minimal"}}]
-        yaml_dumper(restore_object)
-
-    def create_unit_test_task(self):
-        """Create .NET unit test pipeline task"""
-        unit_test_object = [{'task': "DotNetCoreCLI@2", 'displayName': "Run Unit Tests", 'inputs': {"command": "test", "projects": "$(projectTest)", "configuration": "$(buildConfiguration)"}}]
-        yaml_dumper(unit_test_object)
-
-    def create_dotnet_publish_task(self):
-        """Create .NET publish pipeline task"""
-        dotnet_publish_object = [{'task': "DotNetCoreCLI@2", 'displayName': ".NET Publish", 'inputs': {"command": "publish", "projects": "$(projectApi)", "configuration": "$(buildConfiguration)", "arguments": "-o Artifacts/$(projectName)", "modifyOutputPath": "true", "zipAfterPublish": "false"}}]
-        yaml_dumper(dotnet_publish_object)
-
-    def create_publish_artifact_task(self):
-        """Create pipeline artifact publish task"""
-        publish_artifact_object = [{'task': "PublishBuildArtifacts@1", 'displayName': "Publish $(projectName) Artifact", 'inputs': {"PathtoPublish": "$(System.DefaultWorkingDirectory)/Artifacts/$(projectName)", "ArtifactName": "drop", "publishLocation": "Container"}}]
-        yaml_dumper(publish_artifact_object)
+    generate_base_resources(*args, **kwargs)
+    restore_object = [
+        {
+                'task': "DotNetCoreCLI@2",
+                'displayName': ".NET Restore",
+                'inputs': {"command": "restore",
+                "projects": "$(projectApi)",
+                "feedsToUse": "select",
+                "verbosityRestore": "Minimal"
+                }
+            }
+         ]
+    unit_test_object = [
+                {
+                    'task': "DotNetCoreCLI@2",
+                    'displayName': "Run Unit Tests",
+                    'inputs': {"command": "test", "projects": "$(projectTest)", "configuration": "$(buildConfiguration)"
+                    }
+                }
+            ]
+    dotnet_publish_object = [
+            {
+                'task': "DotNetCoreCLI@2",
+                'displayName': ".NET Publish",
+                'inputs': {"command": "publish", "projects": "$(projectApi)", "configuration": "$(buildConfiguration)",
+                "arguments": "-o Artifacts/$(projectName)",
+                "modifyOutputPath": "true",
+                "zipAfterPublish": "false"
+            }
+        }
+    ]
+    publish_artifact_object = [
+                {
+                    'task': "PublishBuildArtifacts@1",
+                    'displayName': "Publish $(projectName) Artifact",
+                    'inputs': {"PathtoPublish": "$(System.DefaultWorkingDirectory)/Artifacts/$(projectName)",
+                    "ArtifactName": "drop", "publishLocation": "Container"
+                    }
+                }
+            ]
+    for object in restore_object, unit_test_object, dotnet_publish_object, publish_artifact_object:
+        yaml_dumper(object)
